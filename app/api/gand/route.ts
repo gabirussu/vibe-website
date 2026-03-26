@@ -6,15 +6,19 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY || ''
 );
 
-export async function GET() {
-  const { data, error } = await supabase
+export async function GET(req: NextRequest) {
+  const url = new URL(req.url);
+  const limit = parseInt(url.searchParams.get('limit') || '3');
+  const offset = parseInt(url.searchParams.get('offset') || '0');
+
+  const { data, error, count } = await supabase
     .from('ganduri')
-    .select('*')
+    .select('*', { count: 'exact' })
     .order('creat_la', { ascending: false })
-    .limit(20);
+    .range(offset, offset + limit - 1);
 
   if (error) return NextResponse.json({ error: error.message }, { status: 400 });
-  return NextResponse.json(data);
+  return NextResponse.json({ data, total: count });
 }
 
 export async function POST(req: NextRequest) {

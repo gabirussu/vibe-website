@@ -25,9 +25,9 @@ export default function Journal() {
   const { elementRef: rightRef, isVisible: rightVisible } = useScrollAnimation();
 
   useEffect(() => {
-    fetch('/api/gand')
+    fetch('/api/gand?limit=3')
       .then(r => r.json())
-      .then(data => { if (Array.isArray(data)) setThoughts(data); });
+      .then(res => { if (res.data) setThoughts(res.data); });
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -173,6 +173,17 @@ export default function Journal() {
                   </p>
                 </div>
               ))}
+            </div>
+
+            {/* BUTON TOATE GÂNDURILE */}
+            <div className="flex justify-center mt-6">
+              <a
+                href="/ganduri"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl text-white font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg"
+                style={{ background: 'linear-gradient(135deg, #78716c, #44403c)', fontFamily: 'var(--font-cinzel)', fontSize: '13px' }}
+              >
+                ✍️ Toate gândurile
+              </a>
             </div>
 
           </div>

@@ -71,11 +71,11 @@ export default function Location() {
 
     if (error) {
       const msg = error.message || error.details || '';
+      console.error('Eroare rezervare COMPLET:', JSON.stringify(error));
       if (msg.includes('locuri') || msg.includes('disponibile') || msg.includes('P0001')) {
         setLocuriIndisponibile(true);
       } else {
         setEroare('A apărut o eroare. Te rugăm să încerci din nou.');
-        console.error('Eroare rezervare:', error);
       }
     } else {
       setSubmitted(true);

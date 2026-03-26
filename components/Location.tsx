@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useScrollAnimation } from '@/lib/hooks/useScrollAnimation';
+import { supabase } from '@/lib/supabase';
 
 const LAT = 46.7712;
 const LNG = 23.5898;
@@ -14,8 +15,11 @@ export default function Location() {
 
   const rezervareRef = useRef<HTMLButtonElement>(null);
   const [modalOpen, setModalOpen] = useState(false);
-  const [form, setForm] = useState({ nume: '', telefon: '', data: '', ora: '', persoane: '2', mesaj: '' });
+  const [form, setForm] = useState({ nume: '', email: '', telefon: '', data: '', ora: '', persoane: '2', mesaj: '' });
   const [submitted, setSubmitted] = useState(false);
+  const [eroare, setEroare] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [locuriIndisponibile, setLocuriIndisponibile] = useState(false);
 
   useEffect(() => {
     if (!mapRef.current) return;
@@ -48,14 +52,39 @@ export default function Location() {
     return () => { document.body.style.overflow = ''; };
   }, [modalOpen]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setEroare('');
+    setLoading(true);
+
+    const { error } = await supabase.from('rezervari').insert({
+      nume: form.nume,
+      email: form.email,
+      telefon: form.telefon,
+      data: form.data,
+      ora: form.ora,
+      persoane: parseInt(form.persoane),
+      mesaj: form.mesaj || null,
+    });
+
+    setLoading(false);
+
+    if (error) {
+      const msg = error.message || error.details || '';
+      if (msg.includes('locuri') || msg.includes('disponibile') || msg.includes('P0001')) {
+        setLocuriIndisponibile(true);
+      } else {
+        setEroare('A apărut o eroare. Te rugăm să încerci din nou.');
+        console.error('Eroare rezervare:', error);
+      }
+    } else {
+      setSubmitted(true);
+    }
   };
 
   const handleClose = () => {
     setModalOpen(false);
-    setTimeout(() => { setSubmitted(false); setForm({ nume: '', telefon: '', data: '', ora: '', persoane: '2', mesaj: '' }); }, 300);
+    setTimeout(() => { setSubmitted(false); setForm({ nume: '', email: '', telefon: '', data: '', ora: '', persoane: '2', mesaj: '' }); }, 300);
   };
 
   const inputClass = "w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-gray-800 font-light focus:outline-none focus:border-stone-400 focus:bg-white transition-all duration-200";
@@ -180,6 +209,36 @@ export default function Location() {
         </svg>
       </div>
 
+      {/* MODAL LOCURI INDISPONIBILE */}
+      {locuriIndisponibile && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+          style={{ background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(6px)' }}
+          onClick={() => setLocuriIndisponibile(false)}
+        >
+          <div
+            className="rounded-3xl shadow-2xl w-full max-w-sm p-8 text-center"
+            style={{ background: 'linear-gradient(to bottom right, #ffffff, #e7e5e4, #d6d3d1)' }}
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="text-5xl mb-4">😔</div>
+            <h3 className="text-2xl font-bold mb-3" style={{ fontFamily: 'var(--font-heading)', color: '#44403c' }}>
+              Ne pare rău
+            </h3>
+            <p className="font-light leading-relaxed mb-6" style={{ fontFamily: 'var(--font-inter)', color: '#78716c' }}>
+              Nu mai sunt locuri disponibile pentru data și ora selectată. Te rugăm să alegi un alt interval orar.
+            </p>
+            <button
+              onClick={() => setLocuriIndisponibile(false)}
+              className="px-8 py-3 rounded-2xl text-white font-medium transition-all duration-300 hover:scale-105"
+              style={{ background: 'linear-gradient(135deg, #78716c, #44403c)', fontFamily: 'var(--font-cinzel)', fontSize: '14px' }}
+            >
+              Încearcă din nou
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* MODAL REZERVARE */}
       {modalOpen && (
         <div
@@ -239,6 +298,19 @@ export default function Location() {
                     </div>
                   </div>
 
+                  <div>
+                    <label className={labelClass}>Email</label>
+                    <input
+                      type="email"
+                      required
+                      placeholder="adresa@email.com"
+                      className={inputClass}
+                      style={{ fontFamily: 'var(--font-inter)' }}
+                      value={form.email}
+                      onChange={e => setForm({ ...form, email: e.target.value })}
+                    />
+                  </div>
+
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className={labelClass}>Data</label>
@@ -290,12 +362,17 @@ export default function Location() {
                     />
                   </div>
 
+                  {eroare && (
+                    <p className="text-red-500 text-sm text-center px-2">{eroare}</p>
+                  )}
+
                   <button
                     type="submit"
-                    className="w-full py-4 rounded-2xl text-white font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg mt-2"
+                    disabled={loading}
+                    className="w-full py-4 rounded-2xl text-white font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg mt-2 disabled:opacity-60 disabled:cursor-not-allowed"
                     style={{ background: 'linear-gradient(135deg, #78716c, #44403c)', fontFamily: 'var(--font-cinzel)', fontSize: '15px' }}
                   >
-                    Confirmă rezervarea
+                    {loading ? 'Se trimite...' : 'Confirmă rezervarea'}
                   </button>
                 </form>
               ) : (

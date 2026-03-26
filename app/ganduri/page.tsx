@@ -39,7 +39,7 @@ export default function GanduriPage() {
 
         {/* HEADER */}
         <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-          <a href="/#feedback" style={{ fontFamily: 'var(--font-cinzel)', fontSize: '12px', color: '#78716c', textDecoration: 'none', letterSpacing: '0.1em' }}>
+          <a href="/#feedback" style={{ fontFamily: 'var(--font-cinzel)', fontSize: '13px', color: 'white', textDecoration: 'none', letterSpacing: '0.1em', background: 'linear-gradient(135deg, #78716c, #44403c)', padding: '0.6rem 1.5rem', borderRadius: '999px', display: 'inline-block' }}>
             ← Înapoi
           </a>
           <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: '3rem', fontWeight: 700, color: '#1c1917', marginTop: '1rem' }}>

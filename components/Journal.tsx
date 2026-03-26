@@ -42,7 +42,7 @@ export default function Journal() {
     const data = await res.json();
     setLoading(false);
     if (res.ok) {
-      setThoughts(prev => [data, ...prev]);
+      setThoughts(prev => [data, ...prev].slice(0, 3));
       setInput('');
       setSubmitted(true);
       setTimeout(() => setSubmitted(false), 3000);

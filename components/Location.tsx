@@ -19,6 +19,9 @@ export default function Location() {
   const [eroare, setEroare] = useState('');
   const [loading, setLoading] = useState(false);
   const [locuriIndisponibile, setLocuriIndisponibile] = useState(false);
+  const [showAdminModal, setShowAdminModal] = useState(false);
+  const [adminPassword, setAdminPassword] = useState('');
+  const [adminError, setAdminError] = useState(false);
 
   useEffect(() => {
     if (!mapRef.current) return;
@@ -132,8 +135,16 @@ export default function Location() {
           {/* INFO */}
           <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 flex flex-col justify-between shadow-xl">
             <div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-6" style={{ fontFamily: 'var(--font-heading)' }}>
+              <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2" style={{ fontFamily: 'var(--font-heading)' }}>
                 Vibe Caffè
+                <span
+                  onClick={() => { setShowAdminModal(true); setAdminPassword(''); setAdminError(false); }}
+                  className="cursor-pointer select-none"
+                  style={{ fontSize: '18px', opacity: 0.25, transition: 'opacity 200ms' }}
+                  onMouseEnter={e => (e.currentTarget.style.opacity = '0.5')}
+                  onMouseLeave={e => (e.currentTarget.style.opacity = '0.25')}
+                  title=""
+                >☕</span>
               </h3>
               <div className="flex flex-col gap-5">
                 <div className="flex items-start gap-3">
@@ -204,6 +215,58 @@ export default function Location() {
           <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
         </svg>
       </div>
+
+      {/* MODAL ADMIN LOGIN */}
+      {showAdminModal && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+          style={{ background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(6px)' }}
+          onClick={() => setShowAdminModal(false)}
+        >
+          <div
+            className="rounded-3xl shadow-2xl w-full max-w-sm p-8"
+            style={{ background: 'linear-gradient(to bottom right, #ffffff, #e7e5e4, #d6d3d1)' }}
+            onClick={e => e.stopPropagation()}
+          >
+            <h3 className="text-2xl font-bold mb-6 text-center" style={{ fontFamily: 'var(--font-heading)', color: '#44403c' }}>
+              Acces Admin
+            </h3>
+            <input
+              type="password"
+              placeholder="Parolă"
+              className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-gray-800 focus:outline-none focus:border-stone-400 mb-3"
+              style={{ fontFamily: 'var(--font-inter)' }}
+              value={adminPassword}
+              onChange={e => { setAdminPassword(e.target.value); setAdminError(false); }}
+              onKeyDown={e => {
+                if (e.key === 'Enter') {
+                  if (adminPassword === '8beliefs') {
+                    sessionStorage.setItem('vc_admin', '1');
+                    window.location.href = '/admin';
+                  } else {
+                    setAdminError(true);
+                  }
+                }
+              }}
+            />
+            {adminError && <p className="text-red-500 text-sm text-center mb-3">Parolă incorectă.</p>}
+            <button
+              onClick={() => {
+                if (adminPassword === '8beliefs') {
+                  sessionStorage.setItem('vc_admin', '1');
+                  window.location.href = '/admin';
+                } else {
+                  setAdminError(true);
+                }
+              }}
+              className="w-full py-3 rounded-2xl text-white font-medium transition-all duration-300 hover:scale-105"
+              style={{ background: 'linear-gradient(135deg, #78716c, #44403c)', fontFamily: 'var(--font-cinzel)', fontSize: '14px' }}
+            >
+              Intră
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* MODAL LOCURI INDISPONIBILE */}
       {locuriIndisponibile && (

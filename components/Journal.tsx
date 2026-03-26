@@ -1,30 +1,52 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useScrollAnimation } from '@/lib/hooks/useScrollAnimation';
 
-const initialThoughts = [
-  { id: 1, text: 'Azi am lăsat graba afară și am băut cafeaua până la capăt.', time: 'acum 2 ore' },
-  { id: 2, text: 'Locul ăsta miroase a liniște.', time: 'ieri' },
-  { id: 3, text: 'Am venit singur. Am plecat mai plin.', time: 'acum 3 zile' },
-];
+type Thought = { id: number; text: string; creat_la: string; };
+
+function timeAgo(dateStr: string) {
+  const diff = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000);
+  if (diff < 60) return 'chiar acum';
+  if (diff < 3600) return `acum ${Math.floor(diff / 60)} min`;
+  if (diff < 86400) return `acum ${Math.floor(diff / 3600)} ore`;
+  if (diff < 172800) return 'ieri';
+  return `acum ${Math.floor(diff / 86400)} zile`;
+}
 
 export default function Journal() {
-  const [thoughts, setThoughts] = useState(initialThoughts);
+  const [thoughts, setThoughts] = useState<Thought[]>([]);
   const [input, setInput] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const { elementRef: titleRef, isVisible: titleVisible } = useScrollAnimation();
   const { elementRef: leftRef, isVisible: leftVisible } = useScrollAnimation();
   const { elementRef: rightRef, isVisible: rightVisible } = useScrollAnimation();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  useEffect(() => {
+    fetch('/api/gand')
+      .then(r => r.json())
+      .then(data => { if (Array.isArray(data)) setThoughts(data); });
+  }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim()) return;
-    setThoughts([{ id: Date.now(), text: input.trim(), time: 'chiar acum' }, ...thoughts]);
-    setInput('');
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 3000);
+    setLoading(true);
+    const res = await fetch('/api/gand', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: input.trim() }),
+    });
+    const data = await res.json();
+    setLoading(false);
+    if (res.ok) {
+      setThoughts(prev => [data, ...prev]);
+      setInput('');
+      setSubmitted(true);
+      setTimeout(() => setSubmitted(false), 3000);
+    }
   };
 
   return (
@@ -121,12 +143,13 @@ export default function Journal() {
                 />
                 <button
                   type="submit"
-                  className="w-full py-3 rounded-2xl text-white font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg"
+                  disabled={loading}
+                  className="w-full py-3 rounded-2xl text-white font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg disabled:opacity-60"
                   style={{ background: 'linear-gradient(135deg, #78716c, #44403c)', fontFamily: 'var(--font-cinzel)', fontSize: '14px' }}
                   onMouseEnter={e => (e.currentTarget.style.background = 'linear-gradient(135deg, #44403c, #1c1917)')}
                   onMouseLeave={e => (e.currentTarget.style.background = 'linear-gradient(135deg, #78716c, #44403c)')}
                 >
-                  {submitted ? '✓ Mulțumim!' : 'Lasă gândul tău'}
+                  {loading ? 'Se trimite...' : submitted ? '✓ Mulțumim!' : 'Lasă gândul tău'}
                 </button>
               </form>
             </div>
@@ -146,7 +169,7 @@ export default function Journal() {
                     "{t.text}"
                   </p>
                   <p className="relative z-10 text-white/40 text-xs mt-2" style={{ fontFamily: 'var(--font-inter)' }}>
-                    {t.time}
+                    {timeAgo(t.creat_la)}
                   </p>
                 </div>
               ))}

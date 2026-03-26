@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useScrollAnimation } from '@/lib/hooks/useScrollAnimation';
-import { supabase } from '@/lib/supabase';
 
 const LAT = 46.7712;
 const LNG = 23.5898;
@@ -57,25 +56,22 @@ export default function Location() {
     setEroare('');
     setLoading(true);
 
-    const { error } = await supabase.from('rezervari').insert({
-      nume: form.nume,
-      email: form.email,
-      telefon: form.telefon,
-      data: form.data,
-      ora: form.ora,
-      persoane: parseInt(form.persoane),
-      mesaj: form.mesaj || null,
+    const res = await fetch('/api/rezervare', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(form),
     });
 
+    const data = await res.json();
     setLoading(false);
 
-    if (error) {
-      const msg = error.message || error.details || '';
-      console.error('Eroare rezervare COMPLET:', JSON.stringify(error));
+    if (!res.ok) {
+      const msg = data.error || '';
       if (msg.includes('locuri') || msg.includes('disponibile') || msg.includes('P0001')) {
         setLocuriIndisponibile(true);
       } else {
         setEroare('A apărut o eroare. Te rugăm să încerci din nou.');
+        console.error('Eroare rezervare:', msg);
       }
     } else {
       setSubmitted(true);

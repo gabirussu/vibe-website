@@ -233,13 +233,13 @@ export default function Journal() {
 
             {/* CARD TESTIMONIALE */}
             {testimoniale.length > 0 && (
-              <div className="mt-6 rounded-3xl p-4 shadow-lg" style={{ background: 'linear-gradient(to bottom right, #ffffff, #d6d3d1, #78716c)' }}>
-                <h3 className="text-lg font-bold text-gray-900 mb-3" style={{ fontFamily: 'var(--font-heading)' }}>
+              <div className="mt-6 rounded-3xl p-3 shadow-lg" style={{ background: 'linear-gradient(to bottom right, #ffffff, #d6d3d1, #78716c)' }}>
+                <h3 className="text-base font-bold text-gray-900 mb-2" style={{ fontFamily: 'var(--font-heading)' }}>
                   ✍️ Ce spun clienții noștri
                 </h3>
 
                 {/* SLIDER */}
-                <div className="relative rounded-2xl overflow-hidden" style={{ aspectRatio: '16/9' }}>
+                <div className="relative rounded-xl overflow-hidden" style={{ aspectRatio: '24/9' }}>
                   <img
                     src={testimoniale[sliderIndex].url}
                     alt={testimoniale[sliderIndex].titlu || ''}

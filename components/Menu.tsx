@@ -49,6 +49,12 @@ export default function Menu() {
   const { elementRef: tabsRef, isVisible: tabsVisible } = useScrollAnimation();
   const { elementRef: gridRef, isVisible: gridVisible } = useScrollAnimation();
 
+  useEffect(() => {
+    const cat = new URLSearchParams(window.location.search).get('cat');
+    if (cat === 'Specialty') setActiveTab('Specialty');
+    else if (cat === 'Patiserie') setActiveTab('Patiserie');
+  }, []);
+
   const handleTabChange = (cat: Category) => {
     if (cat === activeTab) return;
     setFadeIn(false);

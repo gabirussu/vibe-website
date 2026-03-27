@@ -18,6 +18,7 @@ export default function Navbar() {
       const heroHeight = window.innerHeight;
       setScrolled(window.scrollY > heroHeight - 80);
     };
+    handleScroll();
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);

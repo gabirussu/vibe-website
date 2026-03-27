@@ -18,9 +18,9 @@ export default function Features() {
   }, []);
 
   const { elementRef: titleRef, isVisible: titleVisible } = useScrollAnimation();
-  const { elementRef: card1Ref, isVisible: card1Visible } = useScrollAnimation();
+  const { elementRef: card1Ref, isVisible: card1Visible } = useScrollAnimation<HTMLAnchorElement>();
   const { elementRef: card2Ref, isVisible: card2Visible } = useScrollAnimation();
-  const { elementRef: card3Ref, isVisible: card3Visible } = useScrollAnimation();
+  const { elementRef: card3Ref, isVisible: card3Visible } = useScrollAnimation<HTMLAnchorElement>();
   const { elementRef: card4Ref, isVisible: card4Visible } = useScrollAnimation();
 
   return (

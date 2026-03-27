@@ -1,14 +1,21 @@
 'use client';
 
-/**
- * 🎯 HERO STARTER - Versiunea simplă pentru cursanți
- *
- * Aceasta este versiunea MINIMALISTĂ de la care plecăm în curs.
- * Fără animații, fără video, fără JavaScript complex.
- * Doar HTML + Tailwind CSS = fundația de bază.
- */
+import { useState } from 'react';
 
 export default function HeroStarter() {
+  const [showAdminModal, setShowAdminModal] = useState(false);
+  const [adminPassword, setAdminPassword] = useState('');
+  const [adminError, setAdminError] = useState(false);
+
+  const tryAdmin = () => {
+    if (adminPassword === '8beliefs') {
+      sessionStorage.setItem('vc_admin', '1');
+      window.location.href = '/admin';
+    } else {
+      setAdminError(true);
+    }
+  };
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* IMAGINE FUNDAL */}
@@ -56,7 +63,14 @@ export default function HeroStarter() {
             animationDelay: '1.2s',
           }}
         >
-          Cafeaua care îți redă energia fără să îți fure liniștea. O găsești la Vibe Caffè.
+          Cafeaua care îți redă energia fără să îți fure liniștea. O găsești la Vibe Caffè.{' '}
+          <span
+            onClick={() => { setShowAdminModal(true); setAdminPassword(''); setAdminError(false); }}
+            className="cursor-pointer select-none"
+            style={{ fontSize: '0.75em', opacity: 0.3, transition: 'opacity 200ms' }}
+            onMouseEnter={e => (e.currentTarget.style.opacity = '0.8')}
+            onMouseLeave={e => (e.currentTarget.style.opacity = '0.3')}
+          >☕</span>
         </p>
 
         {/* BUTON NOU — DEASUPRA */}
@@ -130,6 +144,43 @@ export default function HeroStarter() {
         </div>
 
       </div>
+
+      {/* MODAL ADMIN */}
+      {showAdminModal && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+          style={{ background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(6px)' }}
+          onClick={() => setShowAdminModal(false)}
+        >
+          <div
+            className="rounded-3xl shadow-2xl w-full max-w-sm p-8"
+            style={{ background: 'linear-gradient(to bottom right, #ffffff, #e7e5e4, #d6d3d1)' }}
+            onClick={e => e.stopPropagation()}
+          >
+            <h3 className="text-2xl font-bold mb-6 text-center" style={{ fontFamily: 'var(--font-heading)', color: '#44403c' }}>
+              Acces Admin
+            </h3>
+            <input
+              type="password"
+              placeholder="Parolă"
+              autoFocus
+              className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-gray-800 focus:outline-none focus:border-stone-400 mb-3"
+              style={{ fontFamily: 'var(--font-inter)' }}
+              value={adminPassword}
+              onChange={e => { setAdminPassword(e.target.value); setAdminError(false); }}
+              onKeyDown={e => { if (e.key === 'Enter') tryAdmin(); }}
+            />
+            {adminError && <p className="text-red-500 text-sm text-center mb-3">Parolă incorectă.</p>}
+            <button
+              onClick={tryAdmin}
+              className="w-full py-3 rounded-2xl text-white font-medium transition-all duration-300 hover:scale-105"
+              style={{ background: 'linear-gradient(135deg, #78716c, #44403c)', fontFamily: 'var(--font-cinzel)', fontSize: '14px' }}
+            >
+              Intră
+            </button>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

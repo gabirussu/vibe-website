@@ -140,9 +140,9 @@ export default function Location() {
                 <span
                   onClick={() => { setShowAdminModal(true); setAdminPassword(''); setAdminError(false); }}
                   className="cursor-pointer select-none"
-                  style={{ fontSize: '18px', opacity: 0.5, transition: 'opacity 200ms' }}
-                  onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
-                  onMouseLeave={e => (e.currentTarget.style.opacity = '0.5')}
+                  style={{ fontSize: '18px', opacity: 0.15, transition: 'opacity 200ms' }}
+                  onMouseEnter={e => (e.currentTarget.style.opacity = '0.5')}
+                  onMouseLeave={e => (e.currentTarget.style.opacity = '0.15')}
                   title=""
                 >☕</span>
               </h3>

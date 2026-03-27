@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 export function useScrollAnimation(threshold = 0.15) {
-  const elementRef = useRef<HTMLDivElement>(null);
+  const elementRef = useRef<HTMLElement>(null);
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {

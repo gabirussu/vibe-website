@@ -37,13 +37,27 @@ export default function Navbar() {
       <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
 
         {/* LOGO */}
-        <a
-          href="#"
-          className="text-2xl font-bold transition-colors duration-300"
-          style={{ fontFamily: 'var(--font-heading)', color: '#F5E6C8' }}
-        >
-          Vibe Caffè
-        </a>
+        <div className="flex flex-col items-start gap-1">
+          <a
+            href="#"
+            className="text-2xl font-bold transition-colors duration-300"
+            style={{ fontFamily: 'var(--font-heading)', color: '#F5E6C8' }}
+          >
+            Vibe Caffè
+          </a>
+          <button
+            onClick={() => {
+              document.getElementById('locatie')?.scrollIntoView({ behavior: 'smooth' });
+              window.dispatchEvent(new CustomEvent('deschide-rezervare'));
+            }}
+            className="hidden md:inline-flex items-center gap-1 px-3 py-0.5 rounded-full text-white/80 hover:text-white transition-all duration-300 hover:scale-105"
+            style={{ fontFamily: 'var(--font-cinzel)', fontSize: '10px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.15)' }}
+            onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.18)')}
+            onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.1)')}
+          >
+            📅 Rezervare
+          </button>
+        </div>
 
         {/* LINKURI DESKTOP */}
         <div className="hidden md:flex items-center gap-6">
@@ -61,16 +75,29 @@ export default function Navbar() {
           ))}
         </div>
 
-        {/* HAMBURGER — MOBILE */}
-        <button
-          className="md:hidden flex flex-col gap-1.5 p-2"
-          onClick={() => setMenuOpen(!menuOpen)}
-          aria-label="Meniu"
-        >
-          <span className="block w-6 h-0.5 transition-all duration-300" style={{ background: '#E5E4E2', transform: menuOpen ? 'rotate(45deg) translate(4px, 4px)' : 'none' }} />
-          <span className="block w-6 h-0.5 transition-all duration-300" style={{ background: '#E5E4E2', opacity: menuOpen ? 0 : 1 }} />
-          <span className="block w-6 h-0.5 transition-all duration-300" style={{ background: '#E5E4E2', transform: menuOpen ? 'rotate(-45deg) translate(4px, -4px)' : 'none' }} />
-        </button>
+        {/* BUTON REZERVARE + HAMBURGER — MOBILE */}
+        <div className="md:hidden flex items-center gap-2">
+          <button
+            onClick={() => {
+              document.getElementById('locatie')?.scrollIntoView({ behavior: 'smooth' });
+              window.dispatchEvent(new CustomEvent('deschide-rezervare'));
+            }}
+            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-white/80 transition-all duration-300"
+            style={{ fontFamily: 'var(--font-cinzel)', fontSize: '11px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.15)' }}
+          >
+            📅 Rezervare
+          </button>
+
+          <button
+            className="flex flex-col gap-1.5 p-2"
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label="Meniu"
+          >
+            <span className="block w-6 h-0.5 transition-all duration-300" style={{ background: '#E5E4E2', transform: menuOpen ? 'rotate(45deg) translate(4px, 4px)' : 'none' }} />
+            <span className="block w-6 h-0.5 transition-all duration-300" style={{ background: '#E5E4E2', opacity: menuOpen ? 0 : 1 }} />
+            <span className="block w-6 h-0.5 transition-all duration-300" style={{ background: '#E5E4E2', transform: menuOpen ? 'rotate(-45deg) translate(4px, -4px)' : 'none' }} />
+          </button>
+        </div>
 
       </div>
 
@@ -91,6 +118,17 @@ export default function Navbar() {
               {label}
             </a>
           ))}
+          <button
+            onClick={() => {
+              setMenuOpen(false);
+              document.getElementById('locatie')?.scrollIntoView({ behavior: 'smooth' });
+              window.dispatchEvent(new CustomEvent('deschide-rezervare'));
+            }}
+            className="mt-2 w-full py-3 rounded-2xl text-white font-medium transition-all duration-300"
+            style={{ background: 'linear-gradient(135deg, #78716c, #44403c)', fontFamily: 'var(--font-cinzel)', fontSize: '13px' }}
+          >
+            📅 Fă o rezervare
+          </button>
         </div>
       )}
     </nav>

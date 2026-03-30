@@ -40,11 +40,11 @@ export default function HeroStarter() {
       </a>
 
       {/* CONȚINUT */}
-      <div className="relative z-10 max-w-4xl mx-auto px-6 text-center text-white">
+      <div className="relative z-10 max-w-4xl 2xl:max-w-6xl mx-auto px-6 text-center text-white">
 
         {/* TITLU PRINCIPAL */}
         <h1
-          className="text-3xl sm:text-5xl md:text-8xl font-bold mb-6 leading-tight drop-shadow-2xl text-[#F5E6C8]"
+          className="text-3xl sm:text-5xl md:text-8xl 2xl:text-9xl font-bold mb-6 leading-tight drop-shadow-2xl text-[#F5E6C8]"
           style={{
             textShadow: '0 4px 32px rgba(0,0,0,0.5)',
             animation: 'fadeInUp 0.8s ease-out both',
@@ -56,14 +56,14 @@ export default function HeroStarter() {
 
         {/* SUBTITLU */}
         <p
-          className="text-base sm:text-xl md:text-3xl mb-8 font-light tracking-wide italic px-2 text-[#9CA3AF]"
+          className="text-base sm:text-xl md:text-3xl 2xl:text-4xl mb-8 font-light tracking-wide italic px-2 text-[#9CA3AF]"
           style={{
             textShadow: '0 2px 16px rgba(0,0,0,0.5)',
             animation: 'fadeInUp 0.8s ease-out both',
             animationDelay: '1.2s',
           }}
         >
-          Cafeaua care îți redă energia fără să îți fure liniștea. O găsești la Vibe Caffè.{' '}
+          Cafeaua care îți redă energia fără să îți fure liniștea.<br />O găsești la Vibe Caffè.{' '}
           <span
             onClick={() => { setShowAdminModal(true); setAdminPassword(''); setAdminError(false); }}
             className="cursor-pointer select-none"
@@ -80,7 +80,7 @@ export default function HeroStarter() {
         >
           <a
             href="#features"
-            className="relative inline-flex items-center justify-center px-12 py-4 overflow-hidden rounded-3xl font-light text-lg border border-white/30 hover:border-white/60 hover:scale-105 transition-all duration-300"
+            className="relative inline-flex items-center justify-center px-12 2xl:px-16 py-4 2xl:py-5 overflow-hidden rounded-3xl font-light text-lg 2xl:text-xl border border-white/30 hover:border-white/60 hover:scale-105 transition-all duration-300"
           >
             <video autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover">
               <source src="/hero-coffe-3.mp4" type="video/mp4" />
@@ -92,13 +92,13 @@ export default function HeroStarter() {
 
         {/* BUTOANE */}
         <div
-          className="flex flex-wrap justify-center gap-4"
+          className="flex flex-wrap justify-center gap-4 2xl:gap-6"
           style={{ animation: 'fadeInUp 0.8s ease-out both', animationDelay: '2.0s' }}
         >
           {/* BUTON CTA CU VIDEO FUNDAL */}
           <a
             href="#menu"
-            className="relative inline-flex items-center justify-center px-16 py-8 overflow-hidden rounded-3xl font-semibold text-white shadow-2xl text-xl hover:scale-105 transition-all duration-300"
+            className="relative inline-flex items-center justify-center px-16 2xl:px-20 py-8 2xl:py-10 overflow-hidden rounded-3xl font-semibold text-white shadow-2xl text-xl 2xl:text-2xl hover:scale-105 transition-all duration-300"
             style={{ boxShadow: '0 8px 40px rgba(0,0,0,0.5)' }}
             onMouseEnter={e => (e.currentTarget.style.boxShadow = '0 12px 60px rgba(0,0,0,0.8)')}
             onMouseLeave={e => (e.currentTarget.style.boxShadow = '0 8px 40px rgba(0,0,0,0.5)')}
@@ -113,7 +113,7 @@ export default function HeroStarter() {
           {/* BUTON SECUNDAR */}
           <a
             href="#locatie"
-            className="relative inline-flex items-center justify-center px-16 py-8 overflow-hidden rounded-3xl font-semibold text-white text-xl hover:scale-105 transition-all duration-300"
+            className="relative inline-flex items-center justify-center px-16 2xl:px-20 py-8 2xl:py-10 overflow-hidden rounded-3xl font-semibold text-white text-xl 2xl:text-2xl hover:scale-105 transition-all duration-300"
             style={{ boxShadow: '0 8px 40px rgba(0,0,0,0.4)' }}
             onMouseEnter={e => (e.currentTarget.style.boxShadow = '0 12px 60px rgba(0,0,0,0.7)')}
             onMouseLeave={e => (e.currentTarget.style.boxShadow = '0 8px 40px rgba(0,0,0,0.4)')}
@@ -133,7 +133,7 @@ export default function HeroStarter() {
         >
           <a
             href="#feedback"
-            className="relative inline-flex items-center justify-center px-10 py-4 overflow-hidden rounded-3xl font-light text-lg border border-white/30 hover:border-white/60 hover:scale-105 transition-all duration-300"
+            className="relative inline-flex items-center justify-center px-10 2xl:px-14 py-4 2xl:py-5 overflow-hidden rounded-3xl font-light text-lg 2xl:text-xl border border-white/30 hover:border-white/60 hover:scale-105 transition-all duration-300"
           >
             <video autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover">
               <source src="/hero-coffe-2.mp4" type="video/mp4" />
@@ -157,9 +157,17 @@ export default function HeroStarter() {
             style={{ background: 'linear-gradient(to bottom right, #ffffff, #e7e5e4, #d6d3d1)' }}
             onClick={e => e.stopPropagation()}
           >
-            <h3 className="text-2xl font-bold mb-6 text-center" style={{ fontFamily: 'var(--font-heading)', color: '#44403c' }}>
-              Acces Admin
-            </h3>
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-2xl font-bold" style={{ fontFamily: 'var(--font-heading)', color: '#44403c' }}>
+                Acces Admin
+              </h3>
+              <button
+                onClick={() => setShowAdminModal(false)}
+                className="w-8 h-8 rounded-full bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-stone-500 text-xl transition-colors"
+              >
+                ×
+              </button>
+            </div>
             <input
               type="password"
               placeholder="Parolă"
@@ -173,10 +181,17 @@ export default function HeroStarter() {
             {adminError && <p className="text-red-500 text-sm text-center mb-3">Parolă incorectă.</p>}
             <button
               onClick={tryAdmin}
-              className="w-full py-3 rounded-2xl text-white font-medium transition-all duration-300 hover:scale-105"
+              className="w-full py-3 rounded-2xl text-white font-medium transition-all duration-300 hover:scale-105 mb-3"
               style={{ background: 'linear-gradient(135deg, #78716c, #44403c)', fontFamily: 'var(--font-cinzel)', fontSize: '14px' }}
             >
               Intră
+            </button>
+            <button
+              onClick={() => setShowAdminModal(false)}
+              className="w-full py-3 rounded-2xl font-medium transition-all duration-300 hover:scale-105"
+              style={{ background: 'rgba(234,88,12,0.07)', color: '#ea580c', border: '1px solid rgba(234,88,12,0.2)', fontFamily: 'var(--font-cinzel)', fontSize: '12px' }}
+            >
+              🙈 Am greșit! Nu am ce căuta aici!
             </button>
           </div>
         </div>

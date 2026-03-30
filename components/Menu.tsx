@@ -138,7 +138,7 @@ export default function Menu() {
               onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
             >
               {/* IMAGINE */}
-              <div className="w-full overflow-hidden" style={{ aspectRatio: '4/3' }}>
+              <div className="w-full overflow-hidden" style={{ aspectRatio: '3/1' }}>
                 <img
                   src={produs.image}
                   alt={produs.name}
@@ -147,19 +147,19 @@ export default function Menu() {
               </div>
 
               {/* CONȚINUT */}
-              <div className="p-5">
-                <div className="flex justify-between items-start mb-2">
-                  <h3 className="text-xl font-bold text-gray-900" style={{ fontFamily: 'var(--font-heading)' }}>
+              <div className="p-2.5">
+                <div className="flex justify-between items-start mb-0.5">
+                  <h3 className="font-bold text-gray-900" style={{ fontFamily: 'var(--font-heading)', fontSize: '20px' }}>
                     {produs.name}
                   </h3>
                   <span
-                    className="text-base font-semibold whitespace-nowrap ml-3"
+                    className="text-base font-semibold whitespace-nowrap ml-2"
                     style={{ fontFamily: 'var(--font-cinzel)', color: '#ea580c' }}
                   >
                     {produs.price} RON
                   </span>
                 </div>
-                <p className="text-gray-500 font-light leading-relaxed text-sm" style={{ fontFamily: 'var(--font-inter)' }}>
+                <p className="text-gray-500 font-light leading-relaxed" style={{ fontFamily: 'var(--font-inter)', fontSize: '11px' }}>
                   {produs.description}
                 </p>
               </div>

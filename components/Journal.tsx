@@ -27,6 +27,7 @@ export default function Journal() {
   const [testimoniale, setTestimoniale] = useState<Testimonial[]>([]);
   const [sliderIndex, setSliderIndex] = useState(0);
   const [modalTestimonialeOpen, setModalTestimonialeOpen] = useState(false);
+  const [galerieIndex, setGalerieIndex] = useState(0);
 
   const { elementRef: titleRef, isVisible: titleVisible } = useScrollAnimation();
   const { elementRef: leftRef, isVisible: leftVisible } = useScrollAnimation();
@@ -128,28 +129,66 @@ export default function Journal() {
 
             {/* CARD GALERIE */}
             {galerie.length > 0 && (
-              <div className="mt-6 rounded-3xl p-6 shadow-lg" style={{ background: 'linear-gradient(to bottom right, #ffffff, #d6d3d1, #78716c)' }}>
-                <h3 className="text-xl font-bold text-gray-900 mb-4" style={{ fontFamily: 'var(--font-heading)' }}>
+              <div className="mt-6 rounded-3xl p-4 shadow-lg" style={{ background: 'linear-gradient(to bottom right, #ffffff, #d6d3d1, #78716c)' }}>
+                <h3 className="text-base font-bold text-gray-900 mb-2" style={{ fontFamily: 'var(--font-heading)' }}>
                   📸 Galerie foto
                 </h3>
-                <div className="grid grid-cols-3 gap-2">
-                  {galerie.slice(0, 3).map(foto => (
-                    <div
-                      key={foto.id}
-                      className="relative rounded-2xl overflow-hidden cursor-pointer hover:scale-105 transition-transform duration-200"
-                      style={{ aspectRatio: '1' }}
-                      onClick={() => setFotoMare(foto.url)}
-                    >
-                      <img src={foto.url} alt={foto.titlu || ''} className="w-full h-full object-cover" />
+
+                {/* SLIDER */}
+                <div className="relative rounded-xl overflow-hidden" style={{ aspectRatio: '16/9' }}>
+                  <img
+                    src={galerie[galerieIndex].url}
+                    alt={galerie[galerieIndex].titlu || ''}
+                    className="w-full h-full object-cover cursor-pointer"
+                    onClick={() => setFotoMare(galerie[galerieIndex].url)}
+                  />
+                  {galerie[galerieIndex].titlu && (
+                    <div className="absolute bottom-0 left-0 right-0 px-4 py-2" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.6), transparent)' }}>
+                      <p className="text-white text-xs" style={{ fontFamily: 'var(--font-italiana)', fontStyle: 'italic' }}>
+                        {galerie[galerieIndex].titlu}
+                      </p>
                     </div>
-                  ))}
+                  )}
+                  {galerie.length > 1 && (
+                    <>
+                      <button
+                        onClick={() => setGalerieIndex(i => (i - 1 + galerie.length) % galerie.length)}
+                        className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full flex items-center justify-center text-white transition-colors"
+                        style={{ background: 'rgba(0,0,0,0.4)' }}
+                      >
+                        ‹
+                      </button>
+                      <button
+                        onClick={() => setGalerieIndex(i => (i + 1) % galerie.length)}
+                        className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full flex items-center justify-center text-white transition-colors"
+                        style={{ background: 'rgba(0,0,0,0.4)' }}
+                      >
+                        ›
+                      </button>
+                    </>
+                  )}
                 </div>
+
+                {/* DOTS */}
+                {galerie.length > 1 && (
+                  <div className="flex justify-center gap-1.5 mt-3">
+                    {galerie.map((_, i) => (
+                      <button
+                        key={i}
+                        onClick={() => setGalerieIndex(i)}
+                        className="rounded-full transition-all duration-200"
+                        style={{ width: i === galerieIndex ? '20px' : '8px', height: '8px', background: i === galerieIndex ? '#44403c' : '#d6d3d1', border: 'none', cursor: 'pointer' }}
+                      />
+                    ))}
+                  </div>
+                )}
+
                 <button
                   onClick={() => setModalGalerieOpen(true)}
                   className="w-full mt-4 py-2 rounded-2xl text-white font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg"
                   style={{ background: 'linear-gradient(135deg, #78716c, #44403c)', fontFamily: 'var(--font-cinzel)', fontSize: '12px' }}
                 >
-                  {galerie.length > 3 ? `Vezi toate fotografiile (${galerie.length})` : 'Vezi galeria'}
+                  {galerie.length > 1 ? `Vezi toate fotografiile (${galerie.length})` : 'Vezi galeria'}
                 </button>
               </div>
             )}
@@ -166,7 +205,7 @@ export default function Journal() {
             }}
           >
             {/* FORMULAR */}
-            <div className="relative rounded-3xl overflow-hidden p-8 shadow-lg mb-6">
+            <div className="relative rounded-3xl overflow-hidden p-8 shadow-lg mb-6" style={{ minHeight: '280px' }}>
               <video autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover">
                 <source src="/hero-coffe-2.mp4" type="video/mp4" />
               </video>
@@ -239,7 +278,7 @@ export default function Journal() {
                 </h3>
 
                 {/* SLIDER */}
-                <div className="relative rounded-xl overflow-hidden" style={{ aspectRatio: '24/9' }}>
+                <div className="relative rounded-xl overflow-hidden" style={{ aspectRatio: '16/9' }}>
                   <img
                     src={testimoniale[sliderIndex].url}
                     alt={testimoniale[sliderIndex].titlu || ''}

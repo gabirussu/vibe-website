@@ -17,6 +17,7 @@ export default function Location() {
   const [form, setForm] = useState({ nume: '', email: '', telefon: '', data: '', ora: '', persoane: '2', mesaj: '' });
   const [submitted, setSubmitted] = useState(false);
   const [eroare, setEroare] = useState('');
+  const [errori, setErrori] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
   const [locuriIndisponibile, setLocuriIndisponibile] = useState(false);
   const [showAdminModal, setShowAdminModal] = useState(false);
@@ -54,9 +55,61 @@ export default function Location() {
     return () => { document.body.style.overflow = ''; };
   }, [modalOpen]);
 
+  // Deschide modalul la eveniment din Navbar
+  useEffect(() => {
+    const handler = () => setModalOpen(true);
+    window.addEventListener('deschide-rezervare', handler);
+    return () => window.removeEventListener('deschide-rezervare', handler);
+  }, []);
+
+  const valideaza = () => {
+    const erori: Record<string, string> = {};
+
+    if (form.nume.trim().length < 3)
+      erori.nume = 'Numele trebuie să aibă cel puțin 3 caractere.';
+
+    const telCurat = form.telefon.replace(/\s/g, '');
+    if (!/^(\+407|07)\d{8}$/.test(telCurat))
+      erori.telefon = 'Număr de telefon invalid. Ex: 07xx xxx xxx';
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
+      erori.email = 'Adresă de email invalidă.';
+
+    if (!form.data)
+      erori.data = 'Selectează o dată.';
+    else {
+      const azi = new Date(); azi.setHours(0, 0, 0, 0);
+      if (new Date(form.data) < azi)
+        erori.data = 'Nu poți rezerva o dată din trecut.';
+    }
+
+    if (!form.ora)
+      erori.ora = 'Selectează o oră.';
+    else {
+      const [h, m] = form.ora.split(':').map(Number);
+      const minute = h * 60 + m;
+      const zi = form.data ? new Date(form.data).getDay() : -1; // 0=dum, 6=sam
+      const eWeekend = zi === 0 || zi === 6;
+      const minStart = eWeekend ? 8 * 60 : 7 * 60;
+      const maxEnd = eWeekend ? 22 * 60 : 21 * 60;
+      if (minute < minStart || minute > maxEnd)
+        erori.ora = eWeekend
+          ? 'Program: 08:00 – 22:00 (sâmbătă și duminică).'
+          : 'Program: 07:00 – 21:00 (luni – vineri).';
+    }
+
+    return erori;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setEroare('');
+    const eroriGasite = valideaza();
+    if (Object.keys(eroriGasite).length > 0) {
+      setErrori(eroriGasite);
+      return;
+    }
+    setErrori({});
     setLoading(true);
 
     const res = await fetch('/api/rezervare', {
@@ -228,9 +281,17 @@ export default function Location() {
             style={{ background: 'linear-gradient(to bottom right, #ffffff, #e7e5e4, #d6d3d1)' }}
             onClick={e => e.stopPropagation()}
           >
-            <h3 className="text-2xl font-bold mb-6 text-center" style={{ fontFamily: 'var(--font-heading)', color: '#44403c' }}>
-              Acces Admin
-            </h3>
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-2xl font-bold" style={{ fontFamily: 'var(--font-heading)', color: '#44403c' }}>
+                Acces Admin
+              </h3>
+              <button
+                onClick={() => setShowAdminModal(false)}
+                className="w-8 h-8 rounded-full bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-stone-500 text-xl transition-colors"
+              >
+                ×
+              </button>
+            </div>
             <input
               type="password"
               placeholder="Parolă"
@@ -259,10 +320,17 @@ export default function Location() {
                   setAdminError(true);
                 }
               }}
-              className="w-full py-3 rounded-2xl text-white font-medium transition-all duration-300 hover:scale-105"
+              className="w-full py-3 rounded-2xl text-white font-medium transition-all duration-300 hover:scale-105 mb-3"
               style={{ background: 'linear-gradient(135deg, #78716c, #44403c)', fontFamily: 'var(--font-cinzel)', fontSize: '14px' }}
             >
               Intră
+            </button>
+            <button
+              onClick={() => setShowAdminModal(false)}
+              className="w-full py-3 rounded-2xl font-medium transition-all duration-300 hover:scale-105"
+              style={{ background: 'rgba(234,88,12,0.07)', color: '#ea580c', border: '1px solid rgba(234,88,12,0.2)', fontFamily: 'var(--font-cinzel)', fontSize: '12px' }}
+            >
+              🙈 Am greșit! Nu am ce căuta aici!
             </button>
           </div>
         </div>
@@ -335,25 +403,25 @@ export default function Location() {
                       <label className={labelClass}>Nume</label>
                       <input
                         type="text"
-                        required
                         placeholder="Numele tău"
-                        className={inputClass}
+                        className={inputClass + (errori.nume ? ' border-red-400' : '')}
                         style={{ fontFamily: 'var(--font-inter)' }}
                         value={form.nume}
-                        onChange={e => setForm({ ...form, nume: e.target.value })}
+                        onChange={e => { setForm({ ...form, nume: e.target.value }); setErrori(p => ({ ...p, nume: '' })); }}
                       />
+                      {errori.nume && <p className="text-red-500 text-xs mt-1">{errori.nume}</p>}
                     </div>
                     <div>
                       <label className={labelClass}>Telefon</label>
                       <input
                         type="tel"
-                        required
                         placeholder="+40 7xx xxx xxx"
-                        className={inputClass}
+                        className={inputClass + (errori.telefon ? ' border-red-400' : '')}
                         style={{ fontFamily: 'var(--font-inter)' }}
                         value={form.telefon}
-                        onChange={e => setForm({ ...form, telefon: e.target.value })}
+                        onChange={e => { setForm({ ...form, telefon: e.target.value }); setErrori(p => ({ ...p, telefon: '' })); }}
                       />
+                      {errori.telefon && <p className="text-red-500 text-xs mt-1">{errori.telefon}</p>}
                     </div>
                   </div>
 
@@ -361,13 +429,13 @@ export default function Location() {
                     <label className={labelClass}>Email</label>
                     <input
                       type="email"
-                      required
                       placeholder="adresa@email.com"
-                      className={inputClass}
+                      className={inputClass + (errori.email ? ' border-red-400' : '')}
                       style={{ fontFamily: 'var(--font-inter)' }}
                       value={form.email}
-                      onChange={e => setForm({ ...form, email: e.target.value })}
+                      onChange={e => { setForm({ ...form, email: e.target.value }); setErrori(p => ({ ...p, email: '' })); }}
                     />
+                    {errori.email && <p className="text-red-500 text-xs mt-1">{errori.email}</p>}
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
@@ -375,23 +443,23 @@ export default function Location() {
                       <label className={labelClass}>Data</label>
                       <input
                         type="date"
-                        required
-                        className={inputClass}
+                        className={inputClass + (errori.data ? ' border-red-400' : '')}
                         style={{ fontFamily: 'var(--font-inter)' }}
                         value={form.data}
-                        onChange={e => setForm({ ...form, data: e.target.value })}
+                        onChange={e => { setForm({ ...form, data: e.target.value }); setErrori(p => ({ ...p, data: '', ora: '' })); }}
                       />
+                      {errori.data && <p className="text-red-500 text-xs mt-1">{errori.data}</p>}
                     </div>
                     <div>
                       <label className={labelClass}>Ora</label>
                       <input
                         type="time"
-                        required
-                        className={inputClass}
+                        className={inputClass + (errori.ora ? ' border-red-400' : '')}
                         style={{ fontFamily: 'var(--font-inter)' }}
                         value={form.ora}
-                        onChange={e => setForm({ ...form, ora: e.target.value })}
+                        onChange={e => { setForm({ ...form, ora: e.target.value }); setErrori(p => ({ ...p, ora: '' })); }}
                       />
+                      {errori.ora && <p className="text-red-500 text-xs mt-1">{errori.ora}</p>}
                     </div>
                   </div>
 

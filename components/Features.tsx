@@ -51,12 +51,12 @@ export default function Features() {
           <a
             href="/?cat=Specialty#menu"
             ref={card1Ref}
-            className="relative rounded-3xl overflow-hidden min-h-[420px] flex flex-col justify-end group cursor-pointer hover:shadow-2xl hover:shadow-black/30"
+            className="relative rounded-3xl overflow-hidden min-h-[180px] flex flex-col justify-end group cursor-pointer hover:shadow-2xl hover:shadow-black/30"
             style={{
               opacity: card1Visible ? 1 : 0,
               transform: card1Visible ? 'translateY(0)' : 'translateY(40px)',
               transition: 'opacity 800ms ease-out, transform 800ms ease-out, box-shadow 300ms ease',
-              transitionDelay: '0.8s',
+              transitionDelay: '0.2s',
             }}
           >
             <img
@@ -65,12 +65,12 @@ export default function Features() {
               className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-            <div className="relative z-10 p-10">
-              <span className="text-4xl mb-4 block">☕</span>
-              <h3 className="text-3xl font-bold text-white mb-3" style={{ fontFamily: 'var(--font-heading)' }}>
+            <div className="relative z-10 p-6">
+              <span className="text-3xl mb-2 block">☕</span>
+              <h3 className="text-2xl font-bold text-white mb-2" style={{ fontFamily: 'var(--font-heading)' }}>
                 Cafea de Specialitate
               </h3>
-              <p className="text-white/80 text-lg font-light leading-relaxed" style={{ fontFamily: 'var(--font-inter)' }}>
+              <p className="text-white/80 text-sm font-light leading-relaxed" style={{ fontFamily: 'var(--font-inter)' }}>
                 Boabe selectate din cele mai bune origini, prăjite cu grijă și preparate de bariști pasionați. Fiecare ceașcă e o experiență în sine.
               </p>
             </div>
@@ -83,12 +83,12 @@ export default function Features() {
             <div
               onClick={() => setModalGalerie(true)}
               ref={card2Ref}
-              className="relative rounded-3xl overflow-hidden min-h-[280px] md:min-h-[195px] md:flex-1 flex flex-col justify-end group cursor-pointer hover:shadow-2xl hover:shadow-black/30"
+              className="relative rounded-3xl overflow-hidden min-h-[85px] md:min-h-[80px] md:flex-1 flex flex-col justify-end group cursor-pointer hover:shadow-2xl hover:shadow-black/30"
               style={{
                 opacity: card2Visible ? 1 : 0,
                 transform: card2Visible ? 'translateY(0)' : 'translateY(40px)',
                 transition: 'opacity 800ms ease-out, transform 800ms ease-out, box-shadow 300ms ease',
-                transitionDelay: '1.0s',
+                transitionDelay: '0.35s',
               }}
             >
               <img
@@ -97,12 +97,12 @@ export default function Features() {
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
-              <div className="relative z-10 p-8">
-                <span className="text-3xl mb-2 block">🌿</span>
-                <h3 className="text-2xl font-bold text-white mb-2" style={{ fontFamily: 'var(--font-heading)' }}>
+              <div className="relative z-10 p-5">
+                <span className="text-2xl mb-1 block">🌿</span>
+                <h3 className="text-lg font-bold text-white mb-1" style={{ fontFamily: 'var(--font-heading)' }}>
                   Ambient Relaxant
                 </h3>
-                <p className="text-white/80 font-light leading-relaxed" style={{ fontFamily: 'var(--font-inter)' }}>
+                <p className="text-white/80 text-sm font-light leading-relaxed" style={{ fontFamily: 'var(--font-inter)' }}>
                   Un spațiu gândit pentru liniște și reîncărcare. Lumină caldă, muzică discretă și o atmosferă care îți dă voie să respiri.
                 </p>
               </div>
@@ -112,12 +112,12 @@ export default function Features() {
             <a
               href="/?cat=Patiserie#menu"
               ref={card3Ref}
-              className="relative rounded-3xl overflow-hidden min-h-[280px] md:min-h-[195px] md:flex-1 flex flex-col justify-end group cursor-pointer hover:shadow-2xl hover:shadow-black/30"
+              className="relative rounded-3xl overflow-hidden min-h-[85px] md:min-h-[80px] md:flex-1 flex flex-col justify-end group cursor-pointer hover:shadow-2xl hover:shadow-black/30"
               style={{
                 opacity: card3Visible ? 1 : 0,
                 transform: card3Visible ? 'translateY(0)' : 'translateY(40px)',
                 transition: 'opacity 800ms ease-out, transform 800ms ease-out, box-shadow 300ms ease',
-                transitionDelay: '1.2s',
+                transitionDelay: '0.5s',
               }}
             >
               <img
@@ -126,12 +126,12 @@ export default function Features() {
                 className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-300 group-hover:scale-110"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
-              <div className="relative z-10 p-8">
-                <span className="text-3xl mb-2 block">🥐</span>
-                <h3 className="text-2xl font-bold text-white mb-2" style={{ fontFamily: 'var(--font-heading)' }}>
+              <div className="relative z-10 p-5">
+                <span className="text-2xl mb-1 block">🥐</span>
+                <h3 className="text-lg font-bold text-white mb-1" style={{ fontFamily: 'var(--font-heading)' }}>
                   Patiserie Artizanală
                 </h3>
-                <p className="text-white/80 font-light leading-relaxed" style={{ fontFamily: 'var(--font-inter)' }}>
+                <p className="text-white/80 text-sm font-light leading-relaxed" style={{ fontFamily: 'var(--font-inter)' }}>
                   Croissante crocante, prăjituri de casă și deserturi proaspete — făcute în fiecare dimineață cu ingrediente naturale.
                 </p>
               </div>
@@ -144,12 +144,12 @@ export default function Features() {
         <div
           onClick={() => setModalTestimoniale(true)}
           ref={card4Ref}
-          className="relative rounded-3xl overflow-hidden min-h-[280px] mt-6 flex flex-col md:flex-row items-center group cursor-pointer hover:shadow-2xl hover:shadow-black/30"
+          className="relative rounded-3xl overflow-hidden min-h-[120px] mt-6 flex flex-col md:flex-row items-center group cursor-pointer hover:shadow-2xl hover:shadow-black/30"
           style={{
             opacity: card4Visible ? 1 : 0,
             transform: card4Visible ? 'translateY(0)' : 'translateY(40px)',
             transition: 'opacity 800ms ease-out, transform 800ms ease-out, box-shadow 300ms ease',
-            transitionDelay: '1.4s',
+            transitionDelay: '0.65s',
           }}
         >
           <img
@@ -160,18 +160,18 @@ export default function Features() {
           <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/50 to-black/20" />
 
           {/* TEXT — STÂNGA */}
-          <div className="relative z-10 p-10 md:w-1/2">
-            <span className="text-4xl mb-4 block">✍️</span>
-            <h3 className="text-3xl font-bold text-white mb-4" style={{ fontFamily: 'var(--font-heading)' }}>
+          <div className="relative z-10 p-6 md:w-1/2">
+            <span className="text-3xl mb-2 block">✍️</span>
+            <h3 className="text-2xl font-bold text-white mb-2" style={{ fontFamily: 'var(--font-heading)' }}>
               Lasă aici gândurile tale
             </h3>
-            <p className="text-white/80 text-lg font-light leading-relaxed" style={{ fontFamily: 'var(--font-inter)' }}>
+            <p className="text-white/80 text-sm font-light leading-relaxed" style={{ fontFamily: 'var(--font-inter)' }}>
               Un colț al cafenelei dedicat ție. Scrie ce simți, lasă un mesaj pentru cei care vin după tine sau descoperă ce au scris alții. Un jurnal viu, împărtășit de toți cei care trec pragul Vibe Caffè — un jurnal pe care îl poți citi și aici.
             </p>
           </div>
 
           {/* DETALII — DREAPTA */}
-          <div className="relative z-10 p-10 md:w-1/2 flex flex-col gap-4 md:items-end">
+          <div className="relative z-10 p-6 md:w-1/2 flex flex-col gap-3 md:items-end">
             {[
               { icon: '📖', text: 'Un jurnal deschis tuturor' },
               { icon: '💬', text: 'Mesaje anonime sau semnate' },

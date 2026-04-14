@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import ChatWidget from "@/components/ChatWidget";
 import { Cormorant_Garamond, Raleway, Cinzel, Lora } from "next/font/google";
 import "./globals.css";
 
@@ -80,6 +81,7 @@ export default function RootLayout({
         className={`${cormorant.variable} ${raleway.variable} ${cinzel.variable} ${lora.variable} antialiased`}
       >
         {children}
+        <ChatWidget />
       </body>
     </html>
   );

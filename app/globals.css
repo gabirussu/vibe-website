@@ -64,6 +64,12 @@
   --color-foreground: var(--foreground);
   --font-heading: var(--font-heading);
   --font-body: var(--font-inter);
+  --animate-pulse-slow: pulse-slow 2.5s ease-in-out infinite;
+}
+
+@keyframes pulse-slow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(68, 64, 60, 0.5); }
+  50%       { box-shadow: 0 0 0 12px rgba(68, 64, 60, 0); }
 }
 
 /* 📝 TIPOGRAFIE MODERNĂ */
@@ -165,6 +171,16 @@ button:hover, .btn:hover {
 
 button:active, .btn:active {
   transform: scale(0.98);
+}
+
+/* Chat widget — neutralizează scale-ul global pe butoane */
+.chat-btn:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.chat-btn:active {
+  transform: none !important;
 }
 
 /* Link-uri cu underline animat */
